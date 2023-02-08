@@ -30,7 +30,7 @@ export default {
       paperWidth: 210,
       paperHeight: 297,
       paperBaseFontSize: 6,
-      paperHeaderFontSize : 14,
+      paperHeaderFontSize : 24,
       paperMarginHorizontal: 9,
       paperMarginVertical: 9,
       companyNameField: "",
