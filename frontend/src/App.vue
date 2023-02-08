@@ -10,15 +10,12 @@
     </div>
     </div>
     <div class="preview">
-      <canvas id="document"></canvas>
+      <canvas id="document" style="border-radius:5px"></canvas>
     </div>
   </div>
 </template>
 
 <script>
-
-
-
 
 export default {
   name: 'App',
@@ -27,8 +24,8 @@ export default {
   },
   data() {
     return {
-      paperWidth: 210,
-      paperHeight: 297,
+      paperWidth: 2480,
+      paperHeight: 3508,
       paperBaseFontSize: 6,
       paperHeaderFontSize : 24,
       paperMarginHorizontal: 9,
@@ -39,7 +36,8 @@ export default {
       ctx: null,
       canvasMarginHorizontal: 0,
       canvasMarginVertical: 0,
-      canvasBaseFontSize: 0
+      canvasBaseFontSize: 0,
+      rect: null
 
     };
   },
@@ -62,6 +60,7 @@ export default {
     // Hook up the canvas to vue
     this.canvas = document.getElementById("document");
     this.ctx = this.canvas.getContext("2d");
+    this.rect = this.canvas.getBoundingClientRect();
     this.setCanvasSize();
     this.draw();
   },
@@ -70,6 +69,7 @@ export default {
       const d = document.querySelectorAll(".preview")[0].getBoundingClientRect();
       this.canvas.height = d.height * 0.9;
       this.canvas.width = (this.paperWidth / this.paperHeight) * this.canvas.height;
+      
       this.canvas.style.width = this.canvas.width;
       this.canvas.style.height = this.canvas.height;
 
@@ -94,7 +94,7 @@ export default {
     },
     writeAddress() {
       this.ctx.fillStyle = "#000";
-      this.ctx.font = this.canvasBaseFontSize + "px Arial";
+      this.ctx.font = this.canvasBaseFontSize + "px sans-serif";
       this.ctx.textAlign = "right";
       this.ctx.textBaseline = "hanging";
       this.companyAddressField.split("\n")
@@ -123,8 +123,8 @@ export default {
 }
 .app {
   background: #ccc;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
 }
 .tools {
