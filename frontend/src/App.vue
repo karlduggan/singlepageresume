@@ -1,7 +1,10 @@
 <template>
   <div class="app">
   <div class="tools">
+    <FormComponent></FormComponent>
     <h3>Details</h3>
+   
+    
     <div class="field">
       <input v-model="companyNameField" type="text" id="name" placeholder="Company name" />
     </div>
@@ -9,18 +12,19 @@
       <textarea id="address" placeholder="Company address"></textarea>
     </div>
     </div>
-    <div class="preview">
-      <canvas id="document" style="border-radius:5px"></canvas>
+    <div class="preview bg-[#f0f0f0]">
+      <canvas class="drop-shadow-lg" id="document" style="border-radius:5px"></canvas>
     </div>
   </div>
 </template>
 
 <script>
+import FormComponent from './components/FormComponent.vue';
 
 export default {
   name: 'App',
   components: {
-   
+    FormComponent
   },
   data() {
     return {
