@@ -5,12 +5,14 @@
     </div>
     <div class="preview bg-[#495163]">
       <canvas class="drop-shadow-lg" id="document" style="border-radius:5px"></canvas>
+      <button class="absolute" @click="downloadToPDF">Download</button>
     </div>
   </div>
 </template>
 
 <script>
 import FormComponent from './components/FormComponent.vue';
+import { jsPDF } from "jspdf";
 
 export default {
   name: 'App',
@@ -64,6 +66,12 @@ export default {
     this.draw();
   },
   methods: {
+    downloadToPDF : function(){
+      var imgData = this.canvas.toDataURL('image/png');
+      var doc = new jsPDF('p', 'mm');
+      doc.addImage(imgData, 'PNG', 10,10);
+      doc.save('my-cv.pdf');
+    },
     test(data){
       this.cv_data = data
       this.draw()
