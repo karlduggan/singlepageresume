@@ -67,10 +67,26 @@ export default {
   },
   methods: {
     downloadToPDF : function(){
+      // Canvas ratio
+      const ratio = this.canvas.width / this.canvas.height
+      // A4 dimensions in portrait orientation
+      const a4Width = 210;
+      const a4Height = 297;
+
       var imgData = this.canvas.toDataURL('image/png');
-      var doc = new jsPDF('p', 'mm');
-      doc.addImage(imgData, 'PNG', 10,10);
+      var doc = new jsPDF({
+       orientation: "portrait", // landscape or portrait
+       unit: "mm",
+       format: "a4"
+      });
+      var width = doc.internal.pageSize.getWidth();
+      var height = doc.internal.pageSize.getHeight();
+      doc.addImage(imgData, 'PNG', 0,0,a4Width,a4Height);
       doc.save('my-cv.pdf');
+    },
+    pxToMm : function(px) {
+      var resolution = 96; // Default screen resolution
+      return px / resolution * 25.4;
     },
     test(data){
       this.cv_data = data
