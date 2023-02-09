@@ -1,18 +1,9 @@
 <template>
   <div class="app">
-  <div class="tools">
-    <FormComponent></FormComponent>
-    <h3>Details</h3>
-   
-    
-    <div class="field">
-      <input v-model="companyNameField" type="text" id="name" placeholder="Company name" />
+    <div class="tools overflow-auto">
+      <FormComponent @cv-data-emitted="test"></FormComponent>
     </div>
-    <div class="field">
-      <textarea id="address" placeholder="Company address"></textarea>
-    </div>
-    </div>
-    <div class="preview bg-[#f0f0f0]">
+    <div class="preview bg-[#495163]">
       <canvas class="drop-shadow-lg" id="document" style="border-radius:5px"></canvas>
     </div>
   </div>
@@ -34,31 +25,35 @@ export default {
       paperHeaderFontSize : 24,
       paperMarginHorizontal: 9,
       paperMarginVertical: 9,
-      companyNameField: "",
-      companyAddressField: "",
       canvas: null,
       ctx: null,
       canvasMarginHorizontal: 0,
       canvasMarginVertical: 0,
       canvasBaseFontSize: 0,
-      rect: null
-
+      rect: null,
+      // Emitted Data leave empty to avoid undefine displayed 
+      cv_data : 
+      {
+        firstname : "",
+        lastname : "",
+        telephone : "",
+        email : "",
+        link1 : "",
+        addressline1 : "",
+        addressline2 : "",
+        city : "",
+        postcode : "",
+        profilesummary : ""
+      },
+      setup : {}
     };
   },
   watch: {
     // All input fields should be placed in the watch method so to update the canvas
-    companyNameField : function(){
-      console.log("draw")
-      this.draw()
-    },
-    companyAddressField : function(){
-      this.draw()
-    },
     canvas : function(){
       this.setCanvasSize()
       this.draw()
     }
-
   },
   mounted() {
     // Hook up the canvas to vue
@@ -69,6 +64,10 @@ export default {
     this.draw();
   },
   methods: {
+    test(data){
+      this.cv_data = data
+      this.draw()
+    },
     setCanvasSize() {
       const d = document.querySelectorAll(".preview")[0].getBoundingClientRect();
       this.canvas.height = d.height * 0.9;
@@ -84,34 +83,25 @@ export default {
       this.canvasBaseFontSize =
         this.paperBaseFontSize * (this.canvas.height / this.paperHeight);
     },
-    writeCompanyName() {
+    writeName() {
       this.ctx.fillStyle = "#000";
       this.ctx.font = this.paperHeaderFontSize + "px Arial";
       this.ctx.fontStyle = "bold";
       this.ctx.textAlign = "center";
-      this.ctx.textBaseline = "hanging";
+      this.ctx.textBaseline = "top";
       this.ctx.fillText(
-        this.companyNameField,
+        this.cv_data.firstname + " " + this.cv_data.lastname,
         this.canvas.width - this.canvas.width/2,
         this.canvasMarginVertical
       );
-    },
-    writeAddress() {
-      this.ctx.fillStyle = "#000";
-      this.ctx.font = this.canvasBaseFontSize + "px sans-serif";
-      this.ctx.textAlign = "right";
-      this.ctx.textBaseline = "hanging";
-      this.companyAddressField.split("\n")
-        .map((text, index) => {
-          this.writeAddressLine(index + 1, text);
-        });
     },
     draw() {
       console.log('drawing');
       this.ctx.fillStyle = '#ffffff';
       this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-      this.writeCompanyName();
-      this.writeAddress();
+      this.writeName();
+
+
     }
   }}
    
@@ -145,9 +135,5 @@ export default {
   align-items: center;
   justify-content: center;
 }
-.field {
-  margin: 1em 0;
-  
-  
-}
+
 </style>
