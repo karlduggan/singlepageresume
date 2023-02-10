@@ -32,7 +32,7 @@ export default {
       paperMarginVertical: 9,
       canvas: null,
       canvasBoxSize : null,
-      fontSize: 50,
+      fontOffset: 0,
       ctx: null,
       canvasMarginHorizontal: 0,
       canvasMarginVertical: 0,
@@ -105,7 +105,6 @@ export default {
       // Calculate new canvas size based on window
       this.setCanvasSize()
       this.draw();
-    
     },
     setCanvasSize() {
       let scaleRes = 1.2
@@ -116,7 +115,10 @@ export default {
       // Set Style
       this.canvas.style.height  = dimension.height * 0.9 + 'px';
       this.canvas.style.width = (this.paperWidth / this.paperHeight) *  (this.canvas.height / scaleRes) + 'px';
-      
+      // Adjust font size to match canvas with offset
+      //this.paperHeaderFontSize = (this.paperHeaderFontSize / (this.paperWidth * 0.1)) * this.canvas.width
+      //console.log(this.paperHeaderFontSize)
+
 
       this.canvasMarginHorizontal =
         this.paperMarginHorizontal * (this.canvas.width / this.paperWidth);
@@ -127,7 +129,7 @@ export default {
     },
     writeName() {
       this.ctx.fillStyle = "#000";
-      this.ctx.font = this.paperHeaderFontSize + "px Arial";
+      this.ctx.font = this.paperHeaderFontSize + this.fontOffset + "px Arial";
       this.ctx.fontStyle = "bold";
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "top";
