@@ -21,13 +21,18 @@ export default {
   },
   data() {
     return {
-      paperWidth: 2480,
+      //paperWidth: 2480,
+      //paperHeight: 3508,
+     
+      paperWidth: 2480 ,
       paperHeight: 3508,
       paperBaseFontSize: 6,
       paperHeaderFontSize : 24,
       paperMarginHorizontal: 9,
       paperMarginVertical: 9,
       canvas: null,
+      canvasBoxSize : null,
+      fontSize: 50,
       ctx: null,
       canvasMarginHorizontal: 0,
       canvasMarginVertical: 0,
@@ -62,43 +67,56 @@ export default {
     this.canvas = document.getElementById("document");
     this.ctx = this.canvas.getContext("2d");
     this.rect = this.canvas.getBoundingClientRect();
-    this.setCanvasSize();
-    this.draw();
+    // Listen for the resize event on the window
+    window.addEventListener("resize", this.handleResize);
+    
   },
+  beforeUnmount() {
+      window.removeEventListener('resize', this.handleResize);
+  },
+  
   methods: {
     downloadToPDF : function(){
-      // Canvas ratio
-      const ratio = this.canvas.width / this.canvas.height
-      // A4 dimensions in portrait orientation
-      const a4Width = 210;
-      const a4Height = 297;
-
       var imgData = this.canvas.toDataURL('image/png');
       var doc = new jsPDF({
        orientation: "portrait", // landscape or portrait
-       unit: "mm",
-       format: "a4"
+       unit: "px",
+       format: "a4",
+       hotfixes: ['px_scaling']
       });
+     
       var width = doc.internal.pageSize.getWidth();
       var height = doc.internal.pageSize.getHeight();
-      doc.addImage(imgData, 'PNG', 0,0,a4Width,a4Height);
-      doc.save('my-cv.pdf');
+      
+      doc.addImage(imgData, 'PNG', 0,0,width,height);
+      //doc.save('my-cv.pdf'); to save 
+      window.open(doc.output('bloburl')); // to debug
     },
     pxToMm : function(px) {
       var resolution = 96; // Default screen resolution
       return px / resolution * 25.4;
+ 
     },
     test(data){
       this.cv_data = data
       this.draw()
     },
+    handleResize: function () {
+      // Calculate new canvas size based on window
+      this.setCanvasSize()
+      this.draw();
+    
+    },
     setCanvasSize() {
-      const d = document.querySelectorAll(".preview")[0].getBoundingClientRect();
-      this.canvas.height = d.height * 0.9;
-      this.canvas.width = (this.paperWidth / this.paperHeight) * this.canvas.height;
+      let scaleRes = 1.2
+      const dimension = document.querySelectorAll(".preview")[0].getBoundingClientRect();
+      this.canvas.height = (dimension.height * 0.9) * scaleRes;
+      this.canvas.width = ((this.paperWidth / this.paperHeight) * this.canvas.height) * scaleRes;
+      console.log(dimension)
+      // Set Style
+      this.canvas.style.height  = dimension.height * 0.9 + 'px';
+      this.canvas.style.width = (this.paperWidth / this.paperHeight) *  (this.canvas.height / scaleRes) + 'px';
       
-      this.canvas.style.width = this.canvas.width;
-      this.canvas.style.height = this.canvas.height;
 
       this.canvasMarginHorizontal =
         this.paperMarginHorizontal * (this.canvas.width / this.paperWidth);
@@ -113,19 +131,22 @@ export default {
       this.ctx.fontStyle = "bold";
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "top";
+      let text = this.cv_data.firstname + " " + this.cv_data.lastname
       this.ctx.fillText(
-        this.cv_data.firstname + " " + this.cv_data.lastname,
+        text,
         this.canvas.width - this.canvas.width/2,
         this.canvasMarginVertical
       );
+      
     },
-    draw() {
-      console.log('drawing');
+
+    draw() { 
+      //this.ctx.save()
+      //this.ctx.scale(1, 1);
       this.ctx.fillStyle = '#ffffff';
       this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
       this.writeName();
-
-
+      //this.ctx.restore()
     }
   }}
    
