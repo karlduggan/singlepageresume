@@ -76,11 +76,10 @@ export default {
   methods: {
     downloadToPDF : function(){
       // Scale up the canvas for high-res test
-      this.canvas.width *= 1.2;
-      this.canvas.height *= 1.2;
+  
 
 
-      var imgData = this.canvas.toDataURL('image/jpeg', 1.0);
+      var imgData = this.canvas.toDataURL('image/PNG', 1.0);
 
       var doc = new jsPDF({
        orientation: "portrait", // landscape or portrait
@@ -91,7 +90,7 @@ export default {
       var width = doc.internal.pageSize.getWidth();
       var height = doc.internal.pageSize.getHeight();
     
-      doc.addImage(imgData, 'JPEG', 0,0,width,height);
+      doc.addImage(imgData, 'PNG', 0,0,width,height);
       //doc.save('my-cv.pdf'); to save 
       window.open(doc.output('bloburl')); // to debug
  
