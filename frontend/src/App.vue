@@ -21,10 +21,8 @@ export default {
   },
   data() {
     return {
+      selectedPreset : "preset01",
       presetstyle : preset,
-      // width: 595.28px height: 841.89px
-      //paperWidth: 2480 ,
-      //paperHeight: 3508 ,
       paperWidth: 595 ,
       paperHeight: 842 ,
       paperBaseFontSize: 0,
@@ -44,8 +42,8 @@ export default {
       // Emitted Data leave empty to avoid undefine displayed 
       cv_data : 
       {
-        firstname : "",
-        lastname : "",
+        firstname : "First",
+        lastname : "Last",
         telephone : "",
         email : "",
         link1 : "",
@@ -93,7 +91,7 @@ export default {
         let rgb = this.dataToPDF[index].fontColor
         doc.setTextColor(rgb[0],rgb[1],rgb[2]);//RGB values
         // Offset needed to horizontally and vertically center so to match the preview 
-        const x_offset = 28
+        const x_offset = 0
         const y_offset = -6
         doc.text(this.dataToPDF[index].text, 
         this.dataToPDF[index].xpos + x_offset, 
@@ -105,21 +103,22 @@ export default {
     },
     setupPdfData(){
       // Goes through all inputs and if completed pushes to dataToPDF list 
-      let testData1 =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01','TitleHeading')
+      let header_name =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01')
+      let testData1 =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_02')
       let testData2 =  this.dataEntry(this.cv_data.firstname,'base','SummaryBase')
-     
+      this.dataToPDF.push(header_name)
       this.dataToPDF.push(testData1)
       this.dataToPDF.push(testData2)
     },
-    dataEntry(text,textStyle, layoutStyle){
+    dataEntry(text,textStyle){
       let data = {
         'text': text,
         'fontStyle': 'Helvetica', 
-        'fontSize': this.presetstyle['preset01'][textStyle].fontSize, 
-        'fontColor': this.presetstyle['preset01'][textStyle].fontColor, 
-        'textAlign': this.presetstyle['preset01'][textStyle].textAlign,
-        'xpos': this.presetstyle['preset01'].layouts[layoutStyle].x, 
-        'ypos': this.presetstyle['preset01'].layouts[layoutStyle].y
+        'fontSize': this.presetstyle[this.selectedPreset][textStyle].fontSize, 
+        'fontColor': this.presetstyle[this.selectedPreset][textStyle].fontColor, 
+        'textAlign': this.presetstyle[this.selectedPreset][textStyle].textAlign,
+        'xpos': this.presetstyle[this.selectedPreset][textStyle].x, 
+        'ypos': this.presetstyle[this.selectedPreset][textStyle].y
       }
       return data
     },
@@ -135,32 +134,45 @@ export default {
       this.draw();
     },
     setCanvasSize() {
-    
       const dimension = document.querySelectorAll(".preview")[0].getBoundingClientRect();
-      
       this.canvas.height = dimension.height * 0.9;
       this.canvas.width = ((this.paperWidth / this.paperHeight) * this.canvas.height);
       // Set Style
       this.canvas.style.height  = dimension.height * 0.9 + 'px';
       this.canvas.style.width = (this.paperWidth / this.paperHeight) *  this.canvas.height + 'px';
+    },
+    previewSequence : function(){
+      let seq = [
+      // firstname & lastname
+      "firstname"
+      // telephone 
+      // email 
+      // link1 
+      // addressline1
+      // addressline2
+      // city 
+      // postcode
+      // profilesummary
+    ]
+    return seq
 
-    
-      // !IMPORTANT! Font scales for preview with this code 
-      //this.canvasBaseFontSize = this.paperBaseFontSize * (this.canvas.width / this.paperWidth);
     },
     renderPreviewText() {
       this.ctx.fillStyle = "#000";
       // Calculate the font size based on the current canvas width and the paper width
-      let fontSize = this.paperHeaderFontSize * (this.canvas.width / this.paperWidth) ;
+      let fontSize = this.presetstyle[this.selectedPreset]['heading_01'].fontSize * (this.canvas.width / this.paperWidth) ;
+
+      // Loop through buffer here parameters (text from input, layout type from json)
       this.ctx.font = fontSize + "px Arial";
       this.ctx.fontStyle = "bold";
-      this.ctx.textAlign = "left";
+      this.ctx.textAlign = this.presetstyle[this.selectedPreset]['heading_01'].textAlign;
       this.ctx.textBaseline = "bottom";
       let text = this.cv_data.firstname + " " + this.cv_data.lastname;
       // Calculate the text position based on the current canvas width and the paper width
-      let x = this.presetstyle['preset01'].layouts['TitleHeading'].x * (this.canvas.width / this.paperWidth) ;
-      let y = this.presetstyle['preset01'].layouts['TitleHeading'].y * (this.canvas.width / this.paperWidth) ;
+      let x = this.presetstyle[this.selectedPreset]['heading_01'].x * (this.canvas.width / this.paperWidth) ;
+      let y = this.presetstyle[this.selectedPreset]['heading_01'].y * (this.canvas.width / this.paperWidth) ;
       this.ctx.fillText(text, x, y);
+
     },
     //drawPreviewText(text,fontSize,fontStyle,fontColor,textAlign,textBaseline,xPos,yPos){
     // Text is parsed via the usr input or saved file and the other paramenters are from the presetSetup json file  

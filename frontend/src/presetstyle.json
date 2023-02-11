@@ -1,30 +1,26 @@
 {
     "preset01": {
         "heading_01": {
-            "fontSize": 28,
+            "fontSize": 25,
             "fontColor": [105,105,105],
-            "textAlign": "center"
+            "textAlign": "center",
+            "x": 297.64,
+            "y": 40
         },
         "heading_02":{
             "fontSize": 11,
             "fontColor": [105,105,105],
-            "textAlign": "left"
+            "textAlign": "left",
+            "x": 0,
+            "y": 40
         },
         "base": {
             "fontSize": 9,
             "fontColor": [105,105,105],
-            "textAlign": "left"
-        }, 
-        "layouts":{
-            "TitleHeading":{
-                "x": 500,
-                "y": 20
-            },
-            "SummaryBase": {
-                "x": 0,
-                "y": 70
-            }
-
+            "textAlign": "left",
+            "x": 0,
+            "y": 40
         }
+        
     }
 }
