@@ -86,7 +86,9 @@
                     <input  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Skill">
                 </div>
             </div>
+            
         </div>
+        <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
     </form>
   </div>
 
@@ -147,6 +149,9 @@ export default {
     methods:{
         emit_cv_data : function(){
             this.$emit('cv-data-emitted',this.cv_data)
+        },
+        emit_download_pdf : function(){
+            this.$emit('download-pdf-emitted')
         }
     }
 }

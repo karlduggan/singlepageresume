@@ -1,17 +1,17 @@
 <template>
   <div class="app">
     <div class="tools overflow-auto">
-      <FormComponent @cv-data-emitted="test"></FormComponent>
+      <FormComponent @cv-data-emitted="test" @download-pdf-emitted="downloadToPDF"></FormComponent>
     </div>
     <div class="preview bg-[#495163]">
       <canvas class="drop-shadow-lg" id="document" style="border-radius:5px"></canvas>
-      <button class="absolute" @click="downloadToPDF">Download</button>
     </div>
   </div>
 </template>
 
 <script>
 import FormComponent from './components/FormComponent.vue';
+import preset from './presetstyle.json'
 import { jsPDF } from "jspdf";
 
 export default {
@@ -21,10 +21,12 @@ export default {
   },
   data() {
     return {
-      // !IMPORTANT! scale value must NOT change to maintain close to accurate text pixel sizes
-      scale :  4.2,
-      paperWidth: 2480 ,
-      paperHeight: 3508,
+      presetstyle : preset,
+      // width: 595.28px height: 841.89px
+      //paperWidth: 2480 ,
+      //paperHeight: 3508 ,
+      paperWidth: 595 ,
+      paperHeight: 842 ,
       paperBaseFontSize: 0,
       paperHeaderFontSize : 25,
       paperMarginHorizontal: 9,
@@ -36,6 +38,9 @@ export default {
       canvasMarginVertical: 0,
       canvasBaseFontSize: 0,
       rect: null,
+      dataToPDF: [],
+      pdfWidth : null,
+      pdfHeight : null,
       // Emitted Data leave empty to avoid undefine displayed 
       cv_data : 
       {
@@ -67,7 +72,6 @@ export default {
     this.rect = this.canvas.getBoundingClientRect();
     // Listen for the resize event on the window
     window.addEventListener("resize", this.handleResize);
-    
   },
   beforeUnmount() {
       window.removeEventListener('resize', this.handleResize);
@@ -75,26 +79,51 @@ export default {
   
   methods: {
     downloadToPDF : function(){
-      // Scale up the canvas for high-res test
-  
-
-
-      var imgData = this.canvas.toDataURL('image/PNG', 1.0);
-
-      var doc = new jsPDF({
-       orientation: "portrait", // landscape or portrait
-       unit: "px",
-       format: "a4"
-      });
-
-      var width = doc.internal.pageSize.getWidth();
-      var height = doc.internal.pageSize.getHeight();
-    
-      doc.addImage(imgData, 'PNG', 0,0,width,height);
+      // Setup data for PDF from inputs entries 
+      this.setupPdfData()
+      // Create jsPDF doc
+      // width: 595.28px height: 841.89px
+      var doc = new jsPDF('p', 'pt', 'a4') 
+      // dataToPDF contains a list of objects containing text data
+      // Iterate through the list of text data of dictionaries 
+      // Example: {'text','fontStyle': 'Arial', 'fontSize': 24, 'fontColor': [225,0,0], 'xpos': 100, 'ypos': 100, 'textAlign': 'center'}
+      for(var index = 0; index < this.dataToPDF.length; index++){
+        doc.setFont(this.dataToPDF[index].fontStyle);
+        doc.setFontSize(this.dataToPDF[index].fontSize);
+        let rgb = this.dataToPDF[index].fontColor
+        doc.setTextColor(rgb[0],rgb[1],rgb[2]);//RGB values
+        // Offset needed to horizontally and vertically center so to match the preview 
+        const x_offset = 28
+        const y_offset = -6
+        doc.text(this.dataToPDF[index].text, 
+        this.dataToPDF[index].xpos + x_offset, 
+        this.dataToPDF[index].ypos + y_offset, 
+        this.dataToPDF[index].textAlign)
+    }
       //doc.save('my-cv.pdf'); to save 
       window.open(doc.output('bloburl')); // to debug
- 
     },
+    setupPdfData(){
+      // Goes through all inputs and if completed pushes to dataToPDF list 
+      let testData1 =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01','TitleHeading')
+      let testData2 =  this.dataEntry(this.cv_data.firstname,'base','SummaryBase')
+     
+      this.dataToPDF.push(testData1)
+      this.dataToPDF.push(testData2)
+    },
+    dataEntry(text,textStyle, layoutStyle){
+      let data = {
+        'text': text,
+        'fontStyle': 'Helvetica', 
+        'fontSize': this.presetstyle['preset01'][textStyle].fontSize, 
+        'fontColor': this.presetstyle['preset01'][textStyle].fontColor, 
+        'textAlign': this.presetstyle['preset01'][textStyle].textAlign,
+        'xpos': this.presetstyle['preset01'].layouts[layoutStyle].x, 
+        'ypos': this.presetstyle['preset01'].layouts[layoutStyle].y
+      }
+      return data
+    },
+    //drawGraphicsToPDF(){},
     test(data){
       this.cv_data = data
       this.draw()
@@ -102,47 +131,48 @@ export default {
     handleResize: function () {
       // Calculate new canvas size based on window
       this.setCanvasSize()
+      // Redraw the canvas with the updated size
       this.draw();
     },
     setCanvasSize() {
+    
       const dimension = document.querySelectorAll(".preview")[0].getBoundingClientRect();
+      
       this.canvas.height = dimension.height * 0.9;
       this.canvas.width = ((this.paperWidth / this.paperHeight) * this.canvas.height);
-      console.log(dimension)
       // Set Style
       this.canvas.style.height  = dimension.height * 0.9 + 'px';
       this.canvas.style.width = (this.paperWidth / this.paperHeight) *  this.canvas.height + 'px';
 
-      this.canvasMarginHorizontal =
-        this.paperMarginHorizontal * (this.canvas.width / this.paperWidth);
-      this.canvasMarginVertical =
-        this.paperMarginVertical * (this.canvas.height / this.paperHeight);
-      
-      // !IMPORTANT! Font scales with this code 
-      this.canvasBaseFontSize = this.paperBaseFontSize * (this.canvas.width / this.paperWidth);
-
+    
+      // !IMPORTANT! Font scales for preview with this code 
+      //this.canvasBaseFontSize = this.paperBaseFontSize * (this.canvas.width / this.paperWidth);
     },
-    writeName() {
+    renderPreviewText() {
       this.ctx.fillStyle = "#000";
-      // !IMPORTANT! Font scales with this code 
-      this.ctx.font = this.paperHeaderFontSize * (this.canvas.width / this.paperWidth) * this.scale + "px Arial";
-      console.log(this.ctx.font)
+      // Calculate the font size based on the current canvas width and the paper width
+      let fontSize = this.paperHeaderFontSize * (this.canvas.width / this.paperWidth) ;
+      this.ctx.font = fontSize + "px Arial";
       this.ctx.fontStyle = "bold";
-      this.ctx.textAlign = "center";
-      this.ctx.textBaseline = "top";
-      let text = this.cv_data.firstname + " " + this.cv_data.lastname
-      this.ctx.fillText(
-        text,
-        this.canvas.width - this.canvas.width/2,
-        this.canvasMarginVertical
-      );
-      
+      this.ctx.textAlign = "left";
+      this.ctx.textBaseline = "bottom";
+      let text = this.cv_data.firstname + " " + this.cv_data.lastname;
+      // Calculate the text position based on the current canvas width and the paper width
+      let x = this.presetstyle['preset01'].layouts['TitleHeading'].x * (this.canvas.width / this.paperWidth) ;
+      let y = this.presetstyle['preset01'].layouts['TitleHeading'].y * (this.canvas.width / this.paperWidth) ;
+      this.ctx.fillText(text, x, y);
     },
+    //drawPreviewText(text,fontSize,fontStyle,fontColor,textAlign,textBaseline,xPos,yPos){
+    // Text is parsed via the usr input or saved file and the other paramenters are from the presetSetup json file  
 
+    //},
     draw() { 
+      // Clear the canvas
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      // Set the font style, size, and color
       this.ctx.fillStyle = '#ffffff';
       this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
-      this.writeName();
+      this.renderPreviewText();
     }
   }}
    

@@ -1,0 +1,30 @@
+{
+    "preset01": {
+        "heading_01": {
+            "fontSize": 28,
+            "fontColor": [105,105,105],
+            "textAlign": "center"
+        },
+        "heading_02":{
+            "fontSize": 11,
+            "fontColor": [105,105,105],
+            "textAlign": "left"
+        },
+        "base": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left"
+        }, 
+        "layouts":{
+            "TitleHeading":{
+                "x": 500,
+                "y": 20
+            },
+            "SummaryBase": {
+                "x": 0,
+                "y": 70
+            }
+
+        }
+    }
+}
