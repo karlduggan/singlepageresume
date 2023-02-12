@@ -1,12 +1,20 @@
 {
     "preset01": {
         "heading_01": {
-            "fontSize": 25,
+            "fontSize": 36,
             "fontColor": [105,105,105],
-            "textAlign": "center",
-            "x": 297.64,
-            "y": 40
+            "textAlign": "left",
+            "x": 40,
+            "y": 60
         },
+        "Profile_Summary": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 40,
+            "y": 80
+        },
+
         "heading_02":{
             "fontSize": 11,
             "fontColor": [105,105,105],
@@ -19,7 +27,56 @@
             "fontColor": [105,105,105],
             "textAlign": "left",
             "x": 0,
+            "y": 80
+        },
+        "Contact_Tel": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 80
+        },
+        "Contact_Email": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 90
+        },
+        "Address_Line1": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
             "y": 40
+        },
+        "Address_Line2": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 50
+        },
+        "Address_City": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 60
+        },
+        "Address_Postcode": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 70
+        },
+        "Url_Link01": {
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 100
         }
         
     }

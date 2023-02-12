@@ -73,6 +73,7 @@
                     Profile Summary
                     </label>
                     <textarea v-model="cv_data.profilesummary" class="shadow h-28 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Summary..."></textarea>
+                    <p class="text-left text-xs ext-gray-600 ">Characters left: {{ summaryMaxCount - summaryCount }}</p>
                 </div>
             </div>
         </div>
@@ -127,11 +128,15 @@ export default {
         },
         'cv_data.profilesummary' : function(){
             this.emit_cv_data()
+            this.countCharacters()
         },
         deep: true
     },
     data(){
         return {
+            // Character Counter
+            summaryMaxCount : 1000,
+            summaryCount: 0,
             cv_data : {
                 firstname : "",
                 lastname : "",
@@ -147,6 +152,10 @@ export default {
         }
     },
     methods:{
+        countCharacters(){
+            console.log('count')
+            this.summaryCount = this.cv_data.profilesummary.length
+        },
         emit_cv_data : function(){
             this.$emit('cv-data-emitted',this.cv_data)
         },

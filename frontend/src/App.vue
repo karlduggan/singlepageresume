@@ -32,9 +32,6 @@ export default {
       canvas: null,
       canvasBoxSize : null,
       ctx: null,
-      canvasMarginHorizontal: 0,
-      canvasMarginVertical: 0,
-      canvasBaseFontSize: 0,
       rect: null,
       dataToPDF: [],
       pdfWidth : null,
@@ -44,14 +41,14 @@ export default {
       {
         firstname : "First",
         lastname : "Last",
-        telephone : "",
-        email : "",
-        link1 : "",
-        addressline1 : "",
-        addressline2 : "",
-        city : "",
-        postcode : "",
-        profilesummary : ""
+        telephone : "07568303809",
+        email : "tester@email.co.uk",
+        link1 : "www.github.com/tester",
+        addressline1 : "Flat 11",
+        addressline2 : "45 St Nicholas Road",
+        city : "Brighton",
+        postcode : "BN13LO",
+        profilesummary : "This is a basic profile about me "
       },
       setup : {}
     };
@@ -77,8 +74,6 @@ export default {
   
   methods: {
     downloadToPDF : function(){
-      // Setup data for PDF from inputs entries 
-      this.setupPdfData()
       // Create jsPDF doc
       // width: 595.28px height: 841.89px
       var doc = new jsPDF('p', 'pt', 'a4') 
@@ -101,15 +96,7 @@ export default {
       //doc.save('my-cv.pdf'); to save 
       window.open(doc.output('bloburl')); // to debug
     },
-    setupPdfData(){
-      // Goes through all inputs and if completed pushes to dataToPDF list 
-      let header_name =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01')
-      let testData1 =  this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_02')
-      let testData2 =  this.dataEntry(this.cv_data.firstname,'base','SummaryBase')
-      this.dataToPDF.push(header_name)
-      this.dataToPDF.push(testData1)
-      this.dataToPDF.push(testData2)
-    },
+
     dataEntry(text,textStyle){
       let data = {
         'text': text,
@@ -142,46 +129,47 @@ export default {
       this.canvas.style.width = (this.paperWidth / this.paperHeight) *  this.canvas.height + 'px';
     },
     previewSequence : function(){
-      let seq = [
-      // firstname & lastname
-      "firstname"
-      // telephone 
-      // email 
-      // link1 
-      // addressline1
-      // addressline2
-      // city 
-      // postcode
-      // profilesummary
-    ]
-    return seq
+      // Important to clear before every draw otherwise no updates occur 
+      this.dataToPDF = []
+      // Goes through all inputs and if completed pushes to dataToPDF list 
+      // Name
+      this.dataToPDF.push(this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01'))
+      // Profile
+      this.dataToPDF.push(this.dataEntry(this.cv_data.profilesummary,'Profile_Summary'))
+      // Address
+      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline1,'Address_Line1'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline2,'Address_Line2'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.city,'Address_City'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.postcode,'Address_Postcode'))
+      // Contact
+      this.dataToPDF.push(this.dataEntry(this.cv_data.telephone,'Contact_Tel'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.email,'Contact_Email'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.link1,'Url_Link01'))
+      
 
     },
     renderPreviewText() {
       this.ctx.fillStyle = "#000";
-      // Calculate the font size based on the current canvas width and the paper width
-      let fontSize = this.presetstyle[this.selectedPreset]['heading_01'].fontSize * (this.canvas.width / this.paperWidth) ;
-
+      // Testing
+      this.previewSequence()
       // Loop through buffer here parameters (text from input, layout type from json)
-      this.ctx.font = fontSize + "px Arial";
-      this.ctx.fontStyle = "bold";
-      this.ctx.textAlign = this.presetstyle[this.selectedPreset]['heading_01'].textAlign;
-      this.ctx.textBaseline = "bottom";
-      let text = this.cv_data.firstname + " " + this.cv_data.lastname;
-      // Calculate the text position based on the current canvas width and the paper width
-      let x = this.presetstyle[this.selectedPreset]['heading_01'].x * (this.canvas.width / this.paperWidth) ;
-      let y = this.presetstyle[this.selectedPreset]['heading_01'].y * (this.canvas.width / this.paperWidth) ;
-      this.ctx.fillText(text, x, y);
-
+      for(var index = 0; index < this.dataToPDF.length; index++){
+        // Calculate the font size based on the current canvas width and the paper width
+        let fontSize = this.dataToPDF[index].fontSize * (this.canvas.width / this.paperWidth) ;
+        this.ctx.font = fontSize + "px Arial";
+        this.ctx.fontStyle = "bold";
+        this.ctx.textAlign = this.dataToPDF[index].textAlign;
+        this.ctx.textBaseline = "bottom";
+        //let text = this.cv_data.firstname + " " + this.cv_data.lastname;
+        // Calculate the text position based on the current canvas width and the paper width
+        let x = this.dataToPDF[index].xpos * (this.canvas.width / this.paperWidth) ;
+        let y = this.dataToPDF[index].ypos * (this.canvas.width / this.paperWidth) ;
+        this.ctx.fillText(this.dataToPDF[index].text, x, y); 
+      }  
     },
-    //drawPreviewText(text,fontSize,fontStyle,fontColor,textAlign,textBaseline,xPos,yPos){
-    // Text is parsed via the usr input or saved file and the other paramenters are from the presetSetup json file  
-
-    //},
     draw() { 
-      // Clear the canvas
+       // Clear the canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      // Set the font style, size, and color
       this.ctx.fillStyle = '#ffffff';
       this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
       this.renderPreviewText();
