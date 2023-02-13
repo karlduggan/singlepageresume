@@ -50,7 +50,8 @@ export default {
         addressline2 : "45 St Nicholas Road",
         city : "Brighton",
         postcode : "BN13LO",
-        profilesummary : "This is a basic profile about me "
+        profilesummary : "",
+        skills: ['1','2','3']
       },
       setup : {}
     };
@@ -155,7 +156,9 @@ export default {
       this.dataToPDF.push(this.dataEntry(this.cv_data.email,'Contact_Email',0))
       this.dataToPDF.push(this.dataEntry(this.cv_data.link1,'Url_Link01',0))
       // Labels
-      this.dataToPDF.push(this.dataEntry("PROFILE",'Label_Profile',0))
+      if(this.cv_data.profilesummary.length > 0){
+        this.dataToPDF.push(this.dataEntry("PROFILE",'Label_Profile',0))
+      }
       this.dataToPDF.push(this.dataEntry("SOFT SKILLS",'Label_Soft_Skills',0))
       this.dataToPDF.push(this.dataEntry("LANGUAGES",'Label_Languages',0))
       this.dataToPDF.push(this.dataEntry("EXPERIENCE",'Label_Experiences',0))
