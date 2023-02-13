@@ -72,7 +72,7 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Profile Summary
                     </label>
-                    <textarea v-model="cv_data.profilesummary" class="shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Summary..."></textarea>
+                    <textarea v-model="cv_data.profilesummary" :maxlength="summaryMaxCount" class="shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Summary..."></textarea>
                     <p class="text-left text-xs ext-gray-600 ">Characters left: {{ summaryMaxCount - summaryCount }}</p>
                 </div>
             </div>
@@ -130,15 +130,15 @@ export default {
             this.emit_cv_data()
             this.countCharacters()
             // Observe word count
-            // this.countWordsPerLine()
             this.updateSummaryLayout()
+           
         },
         deep: true
     },
     data(){
         return {
             // Character Counter
-            summaryMaxCount : 1000,
+            summaryMaxCount : 625,
             summaryCount: 0,
             summaryWordLineCount: 0,
             summaryCharacterLineCount: 0,
@@ -178,21 +178,56 @@ export default {
                 this.summaryCharacterLineCount = 0
             }
         },
-        updateSummaryLayout(){
-        //let organisedSummary = "";
-        let maxCharLine = 10;
-        let charCount = 0;
-        let words = this.cv_data.profilesummary.split(' ');
-        for(let i in words){
-            charCount += words[i].length
-            if(charCount > maxCharLine){
-                console.log("Count is greater")
-                charCount = 0
-            }
+        handleInput() {
+            let maxRows = 6;
+            let maxChars = 10;
+            let lines = this.cv_data.profilesummary.split("\n");
+            let newLines = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let lineStart = 0;
+        while (line.length > maxChars) {
+          let lastSpace = line.lastIndexOf(" ", lineStart + maxChars);
+          let newLine = line.substring(lineStart, lastSpace);
+          newLines.push(newLine);
+          lineStart = lastSpace + 1;
+          line = line.substring(lineStart);
         }
-       
-        
+        newLines.push(line);
+        if (newLines.length >= maxRows) break;
+      }
+
+      this.cv_data.profilesummary = newLines.join("\n");
     },
+        updateSummaryLayout(){
+            let maxRows = 7;
+            let maxChars = 90;
+            let lines = this.cv_data.profilesummary.split("\n");
+            let newLines = [];
+            
+                for (let i = 0; i < lines.length; i++) {
+                    console.log(i)
+                    let line = lines[i];
+                    let lineStart = 0;
+                    while (line.length > maxChars) {
+                        console.log("testing infinte")
+                        let lastSpace = line.lastIndexOf(" ", lineStart + maxChars);
+                        if (lastSpace === -1) {
+                            lastSpace = lineStart + maxChars;
+                        }
+                        let newLine = line.substring(lineStart, lastSpace);
+                        newLines.push(newLine);
+                        lineStart = lastSpace + 1;
+                        line = line.substring(lineStart);
+                        }
+                        newLines.push(line);
+                        if (newLines.length >= maxRows) break;
+                    }
+                
+                this.cv_data.profilesummary = newLines.join("\n");
+            
+                },
 
         emit_cv_data : function(){
             this.$emit('cv-data-emitted',this.cv_data)
