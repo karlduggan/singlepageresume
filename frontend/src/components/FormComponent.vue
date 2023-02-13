@@ -1,6 +1,6 @@
 <template>
  <div class="">
-    <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 divide-y-2 divide-solid divide-gray-300 flex flex-col space-y-4">
+    <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
         <!--Name and Contact-->
         <div class="mb-5">
             <div class="flex mb-4 gap-4 w-full">
@@ -79,7 +79,7 @@
         </div>
         <!-- Skills -->
         <div>
-            <div class="mt-4">
+            <div class="mt-4 ">
                 <div class="mb-4">
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Skills
@@ -89,7 +89,9 @@
             </div>
             
         </div>
-        <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
+        
+            <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
+        
     </form>
   </div>
 
