@@ -1,6 +1,6 @@
 <template>
  <div class="">
-    <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 divide-y-2 divide-solid divide-gray-100 flex flex-col space-y-4">
+    <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 divide-y-2 divide-solid divide-gray-300 flex flex-col space-y-4">
         <!--Name and Contact-->
         <div class="mb-5">
             <div class="flex mb-4 gap-4 w-full">
@@ -8,13 +8,13 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     First Name
                     </label>
-                    <input  v-model="cv_data.firstname" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="John">
+                    <input  v-model="cv_data.firstname" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="John" maxlength="12">
                 </div>
                 <div class="w-full">
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Last Name
                     </label>
-                    <input  v-model="cv_data.lastname" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Doe">
+                    <input  v-model="cv_data.lastname" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Doe"  maxlength="12">
                 </div>
 
             </div>
@@ -23,19 +23,19 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Telephone
                     </label>
-                    <input v-model="cv_data.telephone"  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Telephone">
+                    <input v-model="cv_data.telephone"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Telephone">
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Email
                     </label>
-                    <input v-model="cv_data.email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="email" placeholder="Email">
+                    <input v-model="cv_data.email" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="email" placeholder="Email">
                 </div>
                 <div class="">
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Website or Github
                     </label>
-                    <input v-model="cv_data.link1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="URL">
+                    <input v-model="cv_data.link1" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="URL">
                 </div>
               
             </div>
@@ -47,17 +47,17 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Address
                     </label>
-                    <input  v-model="cv_data.addressline1" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Address Line 1">
+                    <input  v-model="cv_data.addressline1" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Address Line 1">
                 </div>
                 <div class="mb-4">
-                    <input v-model="cv_data.addressline2" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder=" Address Line 2">
+                    <input v-model="cv_data.addressline2" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder=" Address Line 2">
                 </div>
                 <div class="flex mb-4 gap-4 w-full">
                 <div class="w-full">
-                    <input v-model="cv_data.city" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="City">
+                    <input v-model="cv_data.city" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="City">
                 </div>
                 <div class="w-full">
-                    <input v-model="cv_data.postcode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Postcode">
+                    <input v-model="cv_data.postcode" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="text" placeholder="Postcode">
                 </div>
 
             </div>
@@ -72,7 +72,7 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Profile Summary
                     </label>
-                    <textarea v-model="cv_data.profilesummary" class="shadow h-28 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Summary..."></textarea>
+                    <textarea v-model="cv_data.profilesummary" class="shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Summary..."></textarea>
                     <p class="text-left text-xs ext-gray-600 ">Characters left: {{ summaryMaxCount - summaryCount }}</p>
                 </div>
             </div>
@@ -84,7 +84,7 @@
                     <label class="block text-gray-600 font-bold text-left text-sm" for="name">
                     Skills
                     </label>
-                    <input  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Skill">
+                    <input  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Skill">
                 </div>
             </div>
             
@@ -129,6 +129,9 @@ export default {
         'cv_data.profilesummary' : function(){
             this.emit_cv_data()
             this.countCharacters()
+            // Observe word count
+            // this.countWordsPerLine()
+            this.updateSummaryLayout()
         },
         deep: true
     },
@@ -137,6 +140,8 @@ export default {
             // Character Counter
             summaryMaxCount : 1000,
             summaryCount: 0,
+            summaryWordLineCount: 0,
+            summaryCharacterLineCount: 0,
             cv_data : {
                 firstname : "",
                 lastname : "",
@@ -156,6 +161,39 @@ export default {
             console.log('count')
             this.summaryCount = this.cv_data.profilesummary.length
         },
+        countWordsPerLine(){
+            const maxNumberOfCharactersPerLine = 10;
+            
+            // Split text into lines array
+            let lines = this.cv_data.profilesummary.split('\n');
+            // Get the last and current line array
+            let words = lines.at(-1).split(' ');
+            // Assign current word count
+            this.summaryWordLineCount = words.length
+            // Check if word count is greater or equal to max word count
+            if(this.summaryCharacterLineCount > maxNumberOfCharactersPerLine ){
+                // get the second last word and add a \n line break
+                this.cv_data.profilesummary.split(' ').at(-2)  
+                console.log(this.cv_data.profilesummary.split(' ').at(-2))
+                this.summaryCharacterLineCount = 0
+            }
+        },
+        updateSummaryLayout(){
+        //let organisedSummary = "";
+        let maxCharLine = 10;
+        let charCount = 0;
+        let words = this.cv_data.profilesummary.split(' ');
+        for(let i in words){
+            charCount += words[i].length
+            if(charCount > maxCharLine){
+                console.log("Count is greater")
+                charCount = 0
+            }
+        }
+       
+        
+    },
+
         emit_cv_data : function(){
             this.$emit('cv-data-emitted',this.cv_data)
         },

@@ -6,6 +6,7 @@
     <div class="preview bg-[#495163]">
       <canvas class="drop-shadow-lg" id="document" style="border-radius:5px"></canvas>
     </div>
+
   </div>
 </template>
 
@@ -21,9 +22,10 @@ export default {
   },
   data() {
     return {
+      scale : 0,
       selectedPreset : "preset01",
       presetstyle : preset,
-      paperWidth: 595 ,
+      paperWidth: 595,
       paperHeight: 842 ,
       paperBaseFontSize: 0,
       paperHeaderFontSize : 25,
@@ -73,6 +75,7 @@ export default {
   },
   
   methods: {
+
     downloadToPDF : function(){
       // Create jsPDF doc
       // width: 595.28px height: 841.89px
@@ -97,7 +100,7 @@ export default {
       window.open(doc.output('bloburl')); // to debug
     },
 
-    dataEntry(text,textStyle){
+    dataEntry(text,textStyle,newLineOffSet){
       let data = {
         'text': text,
         'fontStyle': 'Helvetica', 
@@ -105,7 +108,7 @@ export default {
         'fontColor': this.presetstyle[this.selectedPreset][textStyle].fontColor, 
         'textAlign': this.presetstyle[this.selectedPreset][textStyle].textAlign,
         'xpos': this.presetstyle[this.selectedPreset][textStyle].x, 
-        'ypos': this.presetstyle[this.selectedPreset][textStyle].y
+        'ypos': this.presetstyle[this.selectedPreset][textStyle].y + newLineOffSet
       }
       return data
     },
@@ -133,18 +136,32 @@ export default {
       this.dataToPDF = []
       // Goes through all inputs and if completed pushes to dataToPDF list 
       // Name
-      this.dataToPDF.push(this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01',0))
       // Profile
-      this.dataToPDF.push(this.dataEntry(this.cv_data.profilesummary,'Profile_Summary'))
+      var lines = this.cv_data.profilesummary.split('\n');
+      var newLineOffSet = 0
+      for (var i = 0; i < lines.length; i++) {
+        this.dataToPDF.push(this.dataEntry(lines[i],'Profile_Summary',newLineOffSet))
+        newLineOffSet += 10
+      }
+
       // Address
-      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline1,'Address_Line1'))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline2,'Address_Line2'))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.city,'Address_City'))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.postcode,'Address_Postcode'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline1,'Address_Line1',0))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline2,'Address_Line2',0))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.city,'Address_City',0))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.postcode,'Address_Postcode',0))
       // Contact
-      this.dataToPDF.push(this.dataEntry(this.cv_data.telephone,'Contact_Tel'))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.email,'Contact_Email'))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.link1,'Url_Link01'))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.telephone,'Contact_Tel',0))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.email,'Contact_Email',0))
+      this.dataToPDF.push(this.dataEntry(this.cv_data.link1,'Url_Link01',0))
+      // Labels
+      this.dataToPDF.push(this.dataEntry("PROFILE",'Label_Profile',0))
+      this.dataToPDF.push(this.dataEntry("SOFT SKILLS",'Label_Soft_Skills',0))
+      this.dataToPDF.push(this.dataEntry("LANGUAGES",'Label_Languages',0))
+      this.dataToPDF.push(this.dataEntry("EXPERIENCE",'Label_Experiences',0))
+      this.dataToPDF.push(this.dataEntry("FRAMEWORKS",'Label_Frameworks',0))
+      this.dataToPDF.push(this.dataEntry("EDUCATION & CERTIFICATIONS",'Label_Education_Cert',0))
+      this.dataToPDF.push(this.dataEntry("PROJECTS",'Label_Projects',0))
       
 
     },
@@ -160,19 +177,28 @@ export default {
         this.ctx.fontStyle = "bold";
         this.ctx.textAlign = this.dataToPDF[index].textAlign;
         this.ctx.textBaseline = "bottom";
-        //let text = this.cv_data.firstname + " " + this.cv_data.lastname;
+        // Canvas uses hex and not rgb but jsPDF used rgb so we use the rgbToHex converter below
+        let rgb = this.dataToPDF[index].fontColor;
+        let hex = this.rgbToHex(rgb[0],rgb[1],rgb[2])
+        this.ctx.fillStyle = "#" + hex;
         // Calculate the text position based on the current canvas width and the paper width
         let x = this.dataToPDF[index].xpos * (this.canvas.width / this.paperWidth) ;
         let y = this.dataToPDF[index].ypos * (this.canvas.width / this.paperWidth) ;
         this.ctx.fillText(this.dataToPDF[index].text, x, y); 
       }  
     },
+    rgbToHex(r, g, b) {
+      return ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+    },
     draw() { 
        // Clear the canvas
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      
       this.ctx.fillStyle = '#ffffff';
-      this.ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+      this.ctx.fillRect(0,0,this.canvas.width ,this.canvas.height );
       this.renderPreviewText();
+      
+
     }
   }}
    
