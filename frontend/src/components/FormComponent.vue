@@ -286,8 +286,8 @@ export default {
             let value;
             switch(listName){
                 case "skills":
-                    selectedList = this.skills;
-                    value = this.cv_data.skillsValue;
+                    selectedList = this.cv_data.skills;
+                    value = this.skillsValue;
                     // Clear Entry
                     this.skillsValue = ""
                     break;
