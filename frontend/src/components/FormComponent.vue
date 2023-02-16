@@ -128,7 +128,20 @@
                     <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.frameworks.length}} out of {{ maxEntries }}</p>
                 </div>
             </div>
-            
+        </div>
+        <!-- Work Experiences -->
+        <div>
+            <div class="mt-4">
+                <label class="block text-gray-600 font-bold text-left text-sm" for="name">
+                    Experience
+                </label>
+                <div class="flex">
+                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
+                
+                </div>
+                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job description"></textarea>
+
+            </div>
         </div>
             <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
     </form>
