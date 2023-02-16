@@ -143,6 +143,30 @@
 
             </div>
         </div>
+        <!-- Education and Certifications -->
+        <div>
+            <div class="mt-4">
+                <label class="block text-gray-600 font-bold text-left text-sm" for="name">
+                    Education & Certifications
+                </label>
+                <div class="flex">
+                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education Title">
+                </div>
+                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education description"></textarea>
+            </div>
+        </div>
+        <!-- Projects -->
+        <div>
+            <div class="mt-4">
+                <label class="block text-gray-600 font-bold text-left text-sm" for="name">
+                    Projects
+                </label>
+                <div class="flex">
+                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project Title">
+                </div>
+                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project description"></textarea>
+            </div>
+        </div>
             <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
     </form>
   </div>
