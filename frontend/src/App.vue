@@ -35,7 +35,7 @@ export default {
       canvasBoxSize : null,
       ctx: null,
       rect: null,
-      dataToPDF: [],
+      dataToRender: [],
       pdfWidth : null,
       pdfHeight : null,
       // Emitted Data leave empty to avoid undefine displayed 
@@ -51,7 +51,22 @@ export default {
         city : "Brighton",
         postcode : "BN13LO",
         profilesummary : "",
-        skills: ['1','2','3']
+        skills: ['1','2','3'],
+        // Bullet point list used for
+        lists: {
+          list01: {
+            name: "Skills",
+            items : []
+            },
+          list02: {
+            name: "",
+            items : []
+          },
+          list03: {
+            name: "",
+            items : []
+          }
+        }
       },
       setup : {}
     };
@@ -81,21 +96,21 @@ export default {
       // Create jsPDF doc
       // width: 595.28px height: 841.89px
       var doc = new jsPDF('p', 'pt', 'a4') 
-      // dataToPDF contains a list of objects containing text data
+      // dataToRender contains a list of objects containing text data
       // Iterate through the list of text data of dictionaries 
       // Example: {'text','fontStyle': 'Arial', 'fontSize': 24, 'fontColor': [225,0,0], 'xpos': 100, 'ypos': 100, 'textAlign': 'center'}
-      for(var index = 0; index < this.dataToPDF.length; index++){
-        doc.setFont(this.dataToPDF[index].fontStyle);
-        doc.setFontSize(this.dataToPDF[index].fontSize);
-        let rgb = this.dataToPDF[index].fontColor
+      for(var index = 0; index < this.dataToRender.length; index++){
+        doc.setFont(this.dataToRender[index].fontStyle);
+        doc.setFontSize(this.dataToRender[index].fontSize);
+        let rgb = this.dataToRender[index].fontColor
         doc.setTextColor(rgb[0],rgb[1],rgb[2]);//RGB values
         // Offset needed to horizontally and vertically center so to match the preview 
         const x_offset = 0
         const y_offset = -6
-        doc.text(this.dataToPDF[index].text, 
-        this.dataToPDF[index].xpos + x_offset, 
-        this.dataToPDF[index].ypos + y_offset, 
-        this.dataToPDF[index].textAlign)
+        doc.text(this.dataToRender[index].text, 
+        this.dataToRender[index].xpos + x_offset, 
+        this.dataToRender[index].ypos + y_offset, 
+        this.dataToRender[index].textAlign)
     }
       //doc.save('my-cv.pdf'); to save 
       window.open(doc.output('bloburl')); // to debug
@@ -134,60 +149,79 @@ export default {
     },
     previewSequence : function(){
       // Important to clear before every draw otherwise no updates occur 
-      this.dataToPDF = []
-      // Goes through all inputs and if completed pushes to dataToPDF list 
+      this.dataToRender = []
+      // Goes through all inputs and if completed pushes to dataToRender list 
       // Name
-      this.dataToPDF.push(this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.firstname + " " + this.cv_data.lastname,'heading_01',0))
       // Profile
       var lines = this.cv_data.profilesummary.split('\n');
       var newLineOffSet = 0
       for (var i = 0; i < lines.length; i++) {
-        this.dataToPDF.push(this.dataEntry(lines[i],'Profile_Summary',newLineOffSet))
+        this.dataToRender.push(this.dataEntry(lines[i],'Profile_Summary',newLineOffSet))
         newLineOffSet += 10
       }
 
       // Address
-      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline1,'Address_Line1',0))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.addressline2,'Address_Line2',0))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.city,'Address_City',0))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.postcode,'Address_Postcode',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.addressline1,'Address_Line1',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.addressline2,'Address_Line2',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.city,'Address_City',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.postcode,'Address_Postcode',0))
       // Contact
-      this.dataToPDF.push(this.dataEntry(this.cv_data.telephone,'Contact_Tel',0))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.email,'Contact_Email',0))
-      this.dataToPDF.push(this.dataEntry(this.cv_data.link1,'Url_Link01',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.telephone,'Contact_Tel',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.email,'Contact_Email',0))
+      this.dataToRender.push(this.dataEntry(this.cv_data.link1,'Url_Link01',0))
       // Labels
       if(this.cv_data.profilesummary.length > 0){
-        this.dataToPDF.push(this.dataEntry("PROFILE",'Label_Profile',0))
+        this.dataToRender.push(this.dataEntry("PROFILE",'Label_Profile',0))
       }
-      this.dataToPDF.push(this.dataEntry("SOFT SKILLS",'Label_Soft_Skills',0))
-      this.dataToPDF.push(this.dataEntry("LANGUAGES",'Label_Languages',0))
-      this.dataToPDF.push(this.dataEntry("EXPERIENCE",'Label_Experiences',0))
-      this.dataToPDF.push(this.dataEntry("FRAMEWORKS",'Label_Frameworks',0))
-      this.dataToPDF.push(this.dataEntry("EDUCATION & CERTIFICATIONS",'Label_Education_Cert',0))
-      this.dataToPDF.push(this.dataEntry("PROJECTS",'Label_Projects',0))
-      
-
+      this.dataToRender.push(this.dataEntry("SOFT SKILLS",'Label_Soft_Skills',0))
+      this.dataToRender.push(this.dataEntry("LANGUAGES",'Label_Languages',0))
+      this.dataToRender.push(this.dataEntry("EXPERIENCE",'Label_Experiences',0))
+      this.dataToRender.push(this.dataEntry("FRAMEWORKS",'Label_Frameworks',0))
+      this.dataToRender.push(this.dataEntry("EDUCATION & CERTIFICATIONS",'Label_Education_Cert',0))
+      this.dataToRender.push(this.dataEntry("PROJECTS",'Label_Projects',0))
+      // Hacked the below part together, will require cleaning later 
+      // Go through list01
+      // Get list01 position
+      let posX = 0
+      for(let i = 0; i < this.cv_data.lists.list01.items.length; i++){
+        let item = this.cv_data.lists.list01.items[i]
+        this.dataToRender.push(this.dataEntry(item,'Items_List01',posX+=20))
+      }
+      // Go through list02
+      posX = 0
+      for(let i = 0; i < this.cv_data.lists.list02.items.length; i++){
+        let item = this.cv_data.lists.list02.items[i]
+        this.dataToRender.push(this.dataEntry(item,'Items_List02',posX+=20))
+      }
+      // Go through list03
+      posX = 0
+      for(let i = 0; i < this.cv_data.lists.list03.items.length; i++){
+        let item = this.cv_data.lists.list03.items[i]
+        this.dataToRender.push(this.dataEntry(item,'Items_List03',posX+=20))
+      }
     },
+    // Important as this is where we display text to the preview canvas
     renderPreviewText() {
       this.ctx.fillStyle = "#000";
       // Testing
       this.previewSequence()
       // Loop through buffer here parameters (text from input, layout type from json)
-      for(var index = 0; index < this.dataToPDF.length; index++){
+      for(var index = 0; index < this.dataToRender.length; index++){
         // Calculate the font size based on the current canvas width and the paper width
-        let fontSize = this.dataToPDF[index].fontSize * (this.canvas.width / this.paperWidth) ;
+        let fontSize = this.dataToRender[index].fontSize * (this.canvas.width / this.paperWidth) ;
         this.ctx.font = fontSize + "px Arial";
         this.ctx.fontStyle = "bold";
-        this.ctx.textAlign = this.dataToPDF[index].textAlign;
+        this.ctx.textAlign = this.dataToRender[index].textAlign;
         this.ctx.textBaseline = "bottom";
         // Canvas uses hex and not rgb but jsPDF used rgb so we use the rgbToHex converter below
-        let rgb = this.dataToPDF[index].fontColor;
+        let rgb = this.dataToRender[index].fontColor;
         let hex = this.rgbToHex(rgb[0],rgb[1],rgb[2])
         this.ctx.fillStyle = "#" + hex;
         // Calculate the text position based on the current canvas width and the paper width
-        let x = this.dataToPDF[index].xpos * (this.canvas.width / this.paperWidth) ;
-        let y = this.dataToPDF[index].ypos * (this.canvas.width / this.paperWidth) ;
-        this.ctx.fillText(this.dataToPDF[index].text, x, y); 
+        let x = this.dataToRender[index].xpos * (this.canvas.width / this.paperWidth) ;
+        let y = this.dataToRender[index].ypos * (this.canvas.width / this.paperWidth) ;
+        this.ctx.fillText(this.dataToRender[index].text, x, y); 
       }  
     },
     rgbToHex(r, g, b) {

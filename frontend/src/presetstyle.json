@@ -118,6 +118,15 @@
             "x": 430,
             "y": 200
         },
+        "Items_List01": {
+            "type": "label",
+            "maxChar": 30,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 200
+        },
         "Label_Languages": {
             "type": "label",
             "maxChar": 30,
@@ -126,11 +135,30 @@
             "textAlign": "left",
             "x": 430,
             "y": 300
-        },"Label_Frameworks": {
+        },
+        "Items_List02": {
+            "type": "label",
+            "maxChar": 30,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 430,
+            "y": 300
+        },
+        "Label_Frameworks": {
             "type": "label",
             "maxChar": 30,
             "fontSize": 9,
             "fontColor": [45, 129, 202],
+            "textAlign": "left",
+            "x": 430,
+            "y": 440
+        },
+        "Items_List03": {
+            "type": "label",
+            "maxChar": 30,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
             "textAlign": "left",
             "x": 430,
             "y": 440

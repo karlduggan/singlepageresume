@@ -1,5 +1,8 @@
 <template>
  <div class="">
+        <ModalComponent :open="false">
+        
+        </ModalComponent>
     <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
         <!--Name and Contact-->
         <div class="mb-5">
@@ -90,7 +93,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
-                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.skills.length}} out of {{ maxEntries }}</p>
+                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.lists.list01.items.length}} out of {{ maxEntries }}</p>
                 </div>
             </div>
             
@@ -108,7 +111,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
-                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.languages.length}} out of {{ maxEntries }}</p>
+                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.lists.list02.items.length}} out of {{ maxEntries }}</p>
                 </div>
             </div>
         </div>
@@ -125,7 +128,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
-                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.frameworks.length}} out of {{ maxEntries }}</p>
+                    <p class="p-1 text-left text-gray-400 text-xs">{{ cv_data.lists.list03.items.length}} out of {{ maxEntries }}</p>
                 </div>
             </div>
         </div>
@@ -174,8 +177,12 @@
 </template>
 
 <script>
+import ModalComponent from '../components/ModalComponent.vue';
 export default {
     name: "FormComponent",
+    components: {
+        ModalComponent
+    },
     watch : {
         'cv_data.firstname' : function(){
             this.emit_cv_data()
@@ -202,6 +209,15 @@ export default {
             this.emit_cv_data()
         },
          'cv_data.postcode' : function(){
+            this.emit_cv_data()
+        },
+        'skillsValue' : function(){
+            this.emit_cv_data()
+        },
+        'languageValue' : function(){
+            this.emit_cv_data()
+        },
+        'frameworkValue' : function(){
             this.emit_cv_data()
         },
         'cv_data.profilesummary' : function(){
@@ -239,10 +255,24 @@ export default {
                 city : "",
                 postcode : "",
                 profilesummary : "",
-                // Lists
-                skills : [],
-                languages : [],
-                frameworks : []
+                // Bullet point list used for
+                lists: {
+                    list01: {
+                        // Skills
+                        name: "Skills",
+                        items : []
+                        },
+                    list02: {
+                        // Languages
+                        name: "",
+                        items : []
+                    },
+                    list03: {
+                        // Frameworks
+                        name: "",
+                        items : []
+                    }
+                }
             }
         }
     },
@@ -287,7 +317,6 @@ export default {
         newLines.push(line);
         if (newLines.length >= maxRows) break;
       }
-
       this.cv_data.profilesummary = newLines.join("\n");
     },
     updateSummaryLayout(){
@@ -323,19 +352,19 @@ export default {
             let value;
             switch(listName){
                 case "skills":
-                    selectedList = this.cv_data.skills;
+                    selectedList = this.cv_data.lists.list01.items;
                     value = this.skillsValue;
                     // Clear Entry
                     this.skillsValue = ""
                     break;
                 case "languages":
-                    selectedList = this.cv_data.languages;
+                    selectedList = this.cv_data.lists.list02.items;
                     value = this.languageValue;
                     // Clear Entry
                     this.languageValue = ""
                     break;
                 case "frameworks":
-                    selectedList = this.cv_data.frameworks
+                    selectedList = this.cv_data.lists.list03.items
                     value = this.frameworkValue;
                     // Clear Entry
                     this.frameworkValue = ""
