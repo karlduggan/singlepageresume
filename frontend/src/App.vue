@@ -112,8 +112,8 @@ export default {
         this.dataToRender[index].ypos + y_offset, 
         this.dataToRender[index].textAlign)
     }
-      //doc.save('my-cv.pdf'); to save 
-      window.open(doc.output('bloburl')); // to debug
+      doc.save('my-cv.pdf'); //to save 
+      //window.open(doc.output('bloburl')); // to debug
     },
 
     dataEntry(text,textStyle,newLineOffSet){

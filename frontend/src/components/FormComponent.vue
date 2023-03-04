@@ -16,9 +16,6 @@
                     </div>
             </div>
             <div class="flex justify-center gap-4 mt-5">
-                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
-                    Update
-                </a>
                 <a class="cursor-pointer bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="modalOpen = false">
                     Close
                 </a>
@@ -190,7 +187,13 @@
                 <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project description"></textarea>
             </div>
         </div>
+            <div class="flex justify-between gap-4">
+                <a class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded" @click="loadJSON">Load JSON</a>
+                <a class="cursor-pointer bg-yellow-500 w-[100%] hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded" @click="saveJSON">Save JSON</a>
+            </div>
+
             <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
+            <p class="text-gray-600 text-xs">Created by Karl Duggan 2023</p>
     </form>
   </div>
 
@@ -203,48 +206,68 @@ export default {
     components: {
         ModalComponent
     },
+    created(){
+        const data = JSON.parse(localStorage.getItem('dataCV'));
+        // Or use sessionStorage if you saved data there
+        if (data) {
+        this.cv_data = Object.assign(this.cv_data, data);
+        }
+    },
     watch : {
         'cv_data.firstname' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.lastname' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.telephone' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.email' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.link1' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.addressline1' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.addressline2' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.city' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
          'cv_data.postcode' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'skillsValue' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'languageValue' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'frameworkValue' : function(){
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         'cv_data.profilesummary' : function(){
             this.emit_cv_data()
             this.countCharacters()
             // Observe word count
             this.updateSummaryLayout()
+            this.updateLocalStorage()
         },
         deep: true
     },
@@ -287,7 +310,7 @@ export default {
                         // Skills
                         set: "list01",
                         name: "Skills",
-                        items : ['testing']
+                        items : []
                         },
                     list02: {
                         // Languages
@@ -306,16 +329,59 @@ export default {
         }
     },
     methods:{
+        updateLocalStorage(){
+            // Set data to localStorage
+            localStorage.setItem('dataCV', JSON.stringify(this.cv_data));
+
+        },
+        saveJSON(){
+            let jsonData = this.cv_data
+            const blobData = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+            const downloadLink = document.createElement('a');
+            downloadLink.download =  "Saved_CV_Data";
+            downloadLink.href = URL.createObjectURL(blobData);
+            downloadLink.onclick = () => {
+                setTimeout(() => {
+                URL.revokeObjectURL(downloadLink.href);
+                }, 1500);
+                };
+            downloadLink.click();
+                
+        },
+        loadJSON(){
+            // Create an input element of type "file"
+            const input = document.createElement('input');
+            input.type = 'file';
+
+            // Define a function to handle the file selection
+            input.onchange = () => {
+                const file = input.files[0];
+                const reader = new FileReader();
+
+                // Define a function to handle the file load
+                reader.onload = (e) => {
+                const fileContent = e.target.result;
+                const cvData = JSON.parse(fileContent);
+                this.cv_data = cvData; // Assign the JSON object to this.cv_data
+                };
+
+                // Read the selected file as text
+                reader.readAsText(file);
+            };
+            // Click the input element to trigger the file selector dialog
+            input.click();
+        },
         updateItem(index, event){
             const updateValue = event.target.value
             this.cv_data.lists[this.modalSet].items[index] = updateValue
             this.emit_cv_data()
-           
+            this.updateLocalStorage()
         },
         deleteItem(index){
             // Get the currect list from modalSelected
             this.cv_data.lists[this.modalSet].items.splice(index, 1)
             this.emit_cv_data()
+            this.updateLocalStorage()
         },
         openModal(option){
             // Set up the selected modal from the option chosen
@@ -420,6 +486,7 @@ export default {
                     if (newLines.length >= maxRows) break;
                 }
             this.cv_data.profilesummary = newLines.join("\n");
+            this.updateLocalStorage()
         
         },
         addToList : function (listName){
@@ -464,11 +531,12 @@ export default {
                     break;
                 }
             }
-            
+            this.updateLocalStorage()
         },
 
         emit_cv_data : function(){
             this.$emit('cv-data-emitted',this.cv_data)
+            
         },
         emit_download_pdf : function(){
             this.$emit('download-pdf-emitted')
