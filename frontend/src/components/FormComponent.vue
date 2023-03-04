@@ -1,7 +1,28 @@
 <template>
  <div class="">
-        <ModalComponent :open="false">
-        
+        <ModalComponent :open="modalOpen">
+            <div>
+                <h1 class="block text-gray-600 font-bold text-left text-lg">{{ modalName }} Section</h1>
+            </div>
+            <div v-for="(name, index) in modalItems" :key="index" class="flex justify-center gap-4 p-4 items-center border-b-2">
+                    <div>
+                        <p>{{ index + 1 }}</p>
+                    </div>
+                    <div>
+                        <input v-on:input="updateItem(index, $event)" :value="name" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="cursor-pointer" @click="deleteItem(index)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="red-700"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-5">
+                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
+                    Update
+                </a>
+                <a class="cursor-pointer bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="modalOpen = false">
+                    Close
+                </a>
+            </div>
         </ModalComponent>
     <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
         <!--Name and Contact-->
@@ -89,7 +110,7 @@
                     </label>
                     <div class="flex">
                         <input v-model="skillsValue"  v-on:keyup.enter="addToList('skills')" maxlength="100" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Press enter to add value">
-                        <p class="pl-4 py-2 text-gray-400 cursor-pointer">
+                        <p class="pl-4 py-2 text-gray-400 cursor-pointer" @click="openModal('list01')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
@@ -107,7 +128,7 @@
                     </label>
                     <div class="flex">
                         <input v-model="languageValue"  v-on:keyup.enter="addToList('languages')" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Press enter to add value">
-                        <p class="pl-4 py-2 text-gray-400 cursor-pointer">
+                        <p class="pl-4 py-2 text-gray-400 cursor-pointer" @click="openModal('list02')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
@@ -124,7 +145,7 @@
                     </label>
                     <div class="flex">
                         <input v-model="frameworkValue" v-on:keyup.enter="addToList('frameworks')" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Press enter to add value">
-                        <p class="pl-4 py-2 text-gray-400 cursor-pointer">
+                        <p class="pl-4 py-2 text-gray-400 cursor-pointer" @click="openModal('list03')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                         </p>
                     </div>
@@ -132,7 +153,7 @@
                 </div>
             </div>
         </div>
-        <!-- Work Experiences -->
+        <!-- Work Experience -->
         <div>
             <div class="mt-4">
                 <label class="block text-gray-600 font-bold text-left text-sm" for="name">
@@ -140,7 +161,6 @@
                 </label>
                 <div class="flex">
                     <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
-                
                 </div>
                 <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job description"></textarea>
 
@@ -225,12 +245,18 @@ export default {
             this.countCharacters()
             // Observe word count
             this.updateSummaryLayout()
-           
         },
         deep: true
     },
     data(){
         return {
+            // Modal state
+            modalOpen: false,
+            modalSelection : null,
+            modalName: "None",
+            modalSet: null,
+            modalItems: [],
+            newValue: "",
             // Character Counter
             summaryMaxCount : 625,
             summaryCount: 0,
@@ -259,17 +285,20 @@ export default {
                 lists: {
                     list01: {
                         // Skills
+                        set: "list01",
                         name: "Skills",
-                        items : []
+                        items : ['testing']
                         },
                     list02: {
                         // Languages
-                        name: "",
+                        set: "list02",
+                        name: "Languages",
                         items : []
                     },
                     list03: {
                         // Frameworks
-                        name: "",
+                        set: "list03",
+                        name: "Frameworks",
                         items : []
                     }
                 }
@@ -277,6 +306,53 @@ export default {
         }
     },
     methods:{
+        updateItem(index, event){
+            const updateValue = event.target.value
+            this.cv_data.lists[this.modalSet].items[index] = updateValue
+            this.emit_cv_data()
+           
+        },
+        deleteItem(index){
+            // Get the currect list from modalSelected
+            this.cv_data.lists[this.modalSet].items.splice(index, 1)
+            this.emit_cv_data()
+        },
+        openModal(option){
+            // Set up the selected modal from the option chosen
+            let open = false;
+            switch(option) {
+                case "list01":
+                    //Skills
+                    if(this.cv_data.lists.list01.items.length > 0){
+                        this.modalItems = this.cv_data.lists.list01.items;
+                        this.modalName = this.cv_data.lists.list01.name;
+                        this.modalSet = this.cv_data.lists.list01.set;
+                        open = true; 
+                    }
+                    break;
+                case "list02":
+                    //Languages
+                    if(this.cv_data.lists.list02.items.length > 0){
+                        this.modalItems = this.cv_data.lists.list02.items;
+                        this.modalName = this.cv_data.lists.list02.name;
+                        this.modalSet = this.cv_data.lists.list02.set;
+                        open = true;
+                    }
+                    break;
+                case "list03":
+                    //Frameworks
+                    if(this.cv_data.lists.list03.items.length > 0){
+                        this.modalItems = this.cv_data.lists.list03.items
+                        this.modalName = this.cv_data.lists.list03.name;
+                        this.modalSet = this.cv_data.lists.list03.set;
+                        open = true;
+                    }
+                    break;
+               
+            }
+            this.modalOpen = open
+            
+        },
         countCharacters(){
             console.log('count')
             this.summaryCount = this.cv_data.profilesummary.length

@@ -186,19 +186,19 @@ export default {
       let posX = 0
       for(let i = 0; i < this.cv_data.lists.list01.items.length; i++){
         let item = this.cv_data.lists.list01.items[i]
-        this.dataToRender.push(this.dataEntry(item,'Items_List01',posX+=20))
+        this.dataToRender.push(this.dataEntry(item,'Items_List01',posX+=16))
       }
       // Go through list02
       posX = 0
       for(let i = 0; i < this.cv_data.lists.list02.items.length; i++){
         let item = this.cv_data.lists.list02.items[i]
-        this.dataToRender.push(this.dataEntry(item,'Items_List02',posX+=20))
+        this.dataToRender.push(this.dataEntry(item,'Items_List02',posX+=16))
       }
       // Go through list03
       posX = 0
       for(let i = 0; i < this.cv_data.lists.list03.items.length; i++){
         let item = this.cv_data.lists.list03.items[i]
-        this.dataToRender.push(this.dataEntry(item,'Items_List03',posX+=20))
+        this.dataToRender.push(this.dataEntry(item,'Items_List03',posX+=16))
       }
     },
     // Important as this is where we display text to the preview canvas
