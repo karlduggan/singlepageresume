@@ -173,12 +173,30 @@
             "x": 40,
             "y": 200
         },
+        "Experiences_List":{
+            "type": "",
+            "maxChar": 70,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 40,
+            "y": 200
+        },
         "Label_Projects": {
             "type": "label",
             "text": "",
             "maxChar": 30,
             "fontSize": 9,
             "fontColor": [45, 129, 202],
+            "textAlign": "left",
+            "x": 40,
+            "y": 700
+        },
+        "Project_List":{
+            "type": "",
+            "maxChar": 70,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
             "textAlign": "left",
             "x": 40,
             "y": 700
@@ -192,6 +210,16 @@
             "textAlign": "left",
             "x": 40,
             "y": 600
+        },
+        "Education_List":{
+            "type": "",
+            "maxChar": 70,
+            "fontSize": 9,
+            "fontColor": [105,105,105],
+            "textAlign": "left",
+            "x": 40,
+            "y": 600
+            
         }
         
     }

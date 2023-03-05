@@ -39,35 +39,51 @@ export default {
       pdfWidth : null,
       pdfHeight : null,
       // Emitted Data leave empty to avoid undefine displayed 
-      cv_data : 
-      {
-        firstname : "First",
-        lastname : "Last",
-        telephone : "07568303809",
-        email : "tester@email.co.uk",
-        link1 : "www.github.com/tester",
-        addressline1 : "Flat 11",
-        addressline2 : "45 St Nicholas Road",
-        city : "Brighton",
-        postcode : "BN13LO",
-        profilesummary : "",
-        skills: ['1','2','3'],
-        // Bullet point list used for
-        lists: {
-          list01: {
-            name: "Skills",
-            items : []
+      cv_data : {
+                firstname : "",
+                lastname : "",
+                telephone : "",
+                email : "",
+                link1 : "",
+                addressline1 : "",
+                addressline2 : "",
+                city : "",
+                postcode : "",
+                profilesummary : "",
+                // Bullet point list used for
+                lists: {
+                    list01: {
+                        // Skills
+                        set: "list01",
+                        name: "Skills",
+                        items : []
+                        },
+                    list02: {
+                        // Languages
+                        set: "list02",
+                        name: "Languages",
+                        items : []
+                    },
+                    list03: {
+                        // Frameworks
+                        set: "list03",
+                        name: "Frameworks",
+                        items : []
+                    }
+                },
+                experience: {
+                    display: false,
+                    items: []
+                },
+                education: {
+                    display: false,
+                    items: []
+                },
+                project: {
+                    display: false,
+                    items: []
+                }
             },
-          list02: {
-            name: "",
-            items : []
-          },
-          list03: {
-            name: "",
-            items : []
-          }
-        }
-      },
       setup : {}
     };
   },
@@ -198,8 +214,37 @@ export default {
       posX = 0
       for(let i = 0; i < this.cv_data.lists.list03.items.length; i++){
         let item = this.cv_data.lists.list03.items[i]
+        console.log(item)
         this.dataToRender.push(this.dataEntry(item,'Items_List03',posX+=16))
       }
+      // Go through experience TODO
+      posX = 0
+      for(let i = 0; i < this.cv_data.experience.items.length; i++){
+        let item = this.cv_data.experience.items[i]
+        this.dataToRender.push(this.dataEntry(item.title,'Experiences_List',posX+=16))
+        this.dataToRender.push(this.dataEntry(item.text,'Experiences_List',posX+=16))
+        // Add Gap
+        posX += 10;
+      }
+      // Go through projects TODO
+      posX = 0
+      for(let i = 0; i < this.cv_data.project.items.length; i++){
+        let item = this.cv_data.project.items[i]
+        this.dataToRender.push(this.dataEntry(item.title,'Project_List',posX+=16))
+        this.dataToRender.push(this.dataEntry(item.text,'Project_List',posX+=16))
+        // Add Gap
+        posX += 10;
+      }
+      // Go through education TODO
+      posX = 0
+      for(let i = 0; i < this.cv_data.education.items.length; i++){
+        let item = this.cv_data.education.items[i]
+        this.dataToRender.push(this.dataEntry(item.title,'Education_List',posX+=16))
+        this.dataToRender.push(this.dataEntry(item.text,'Education_List',posX+=16))
+        // Add Gap
+        posX += 10;
+      }
+      
     },
     // Important as this is where we display text to the preview canvas
     renderPreviewText() {

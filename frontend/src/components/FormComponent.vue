@@ -157,10 +157,12 @@
                     Experience
                 </label>
                 <div class="flex">
-                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
+                    <input v-model="experience_title" maxlength="100" v-on:keyup.enter="addToList('experience')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
                 </div>
-                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job description"></textarea>
-
+                <textarea v-model="experience_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job description"></textarea>
+            </div>
+            <div class="mt-2 flex justify-between gap-4">
+                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
             </div>
         </div>
         <!-- Education and Certifications -->
@@ -170,9 +172,12 @@
                     Education & Certifications
                 </label>
                 <div class="flex">
-                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education Title">
+                    <input v-model="education_title" maxlength="100" v-on:keyup.enter="addToList('education')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education Title">
                 </div>
-                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education description"></textarea>
+                <textarea v-model="education_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education description"></textarea>
+            </div>
+            <div class="mt-2 flex justify-between gap-4">
+                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
             </div>
         </div>
         <!-- Projects -->
@@ -182,10 +187,15 @@
                     Projects
                 </label>
                 <div class="flex">
-                    <input v-model="frameworkValue" maxlength="100"  class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project Title">
+                    <input v-model="project_title" maxlength="100" v-on:keyup.enter="addToList('project')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project Title">
                 </div>
-                <textarea class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project description"></textarea>
+                <textarea v-model="project_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project description"></textarea>
+            
             </div>
+            <div class="mt-2 flex justify-between gap-4">
+                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
+            </div>
+            
         </div>
             <div class="flex justify-between gap-4">
                 <a class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded" @click="loadJSON">Load JSON</a>
@@ -206,12 +216,12 @@ export default {
     components: {
         ModalComponent
     },
-    created(){
-        const data = JSON.parse(localStorage.getItem('dataCV'));
-        // Or use sessionStorage if you saved data there
-        if (data) {
-        this.cv_data = Object.assign(this.cv_data, data);
-        }
+    setup(){
+        //const data = JSON.parse(localStorage.getItem('dataCV'));
+         //Or use sessionStorage if you saved data there
+        //if (data) {
+        //this.cv_data = Object.assign(this.cv_data, data);
+        //}
     },
     watch : {
         'cv_data.firstname' : function(){
@@ -291,6 +301,15 @@ export default {
             languageValue: "",
             // Framework Value
             frameworkValue: "",
+            // Experience
+            experience_title: "",
+            experience_text: "",
+            // Education 
+            education_title: "",
+            education_text: "",
+            // Project
+            project_title: "",
+            project_text: "",
             // Max entries for lists
             maxEntries : 5,
             cv_data : {
@@ -324,6 +343,18 @@ export default {
                         name: "Frameworks",
                         items : []
                     }
+                },
+                experience: {
+                    display: false,
+                    items: [{'title': 'tetsing title', 'text': "testing text"}]
+                },
+                education: {
+                    display: false,
+                    items: []
+                },
+                project: {
+                    display: false,
+                    items: []
                 }
             }
         }
@@ -332,7 +363,9 @@ export default {
         updateLocalStorage(){
             // Set data to localStorage
             localStorage.setItem('dataCV', JSON.stringify(this.cv_data));
-
+        },
+        clearLocalStorage() {
+            localStorage.clear();
         },
         saveJSON(){
             let jsonData = this.cv_data
@@ -493,6 +526,8 @@ export default {
            
             let selectedList;
             let value;
+            let textarea;
+            let pushObject = false;
             switch(listName){
                 case "skills":
                     selectedList = this.cv_data.lists.list01.items;
@@ -512,23 +547,56 @@ export default {
                     // Clear Entry
                     this.frameworkValue = ""
                     break;
+                case "experience":
+                    selectedList = this.cv_data.experience.items
+                    value = this.experience_title;
+                    textarea = this.experience_text
+                    pushObject = true;
+                    // Clear Entry
+                    this.experience_title = ""
+                    this.experience_text = ""
+                    break;
+                case "education":
+                    selectedList = this.cv_data.education.items
+                    value = this.education_title;
+                    textarea = this.education_text
+                    pushObject = true;
+                    // Clear Entry
+                    this.education_title = ""
+                    this.education_text = ""
+                    break;
+                case "project":
+                    selectedList = this.cv_data.project.items
+                    value = this.project_title;
+                    textarea = this.project_text
+                    pushObject = true;
+                    // Clear Entry
+                    this.project_title = ""
+                    this.project_text = ""
+                    break
             }
-            // Check if max value has already been reached, if not then input data
-            if(selectedList.length < this.maxEntries){
-                // Add data to selected list
-                selectedList.push(value)
-            } else {
-                // Give error message in input field
-                switch(listName){
-                case "skills":
-                    this.skillsValue = "Max entry of " + this.maxEntries + " reached!"
-                    break;
-                case "languages":
-                    this.languageValue = "Max entry of " + this.maxEntries + " reached!"
-                    break;
-                case "frameworks":
-                    this.frameworkValue = "Max entry of " + this.maxEntries + " reached!"
-                    break;
+            // Check if entry is an object push or a string value push
+            if(pushObject){
+                let newObject = {'title': value, 'text': textarea}
+                selectedList.push(newObject)
+            }else {
+                // Check if max value has already been reached, if not then input data
+                if(selectedList.length < this.maxEntries){
+                    // Add data to selected list
+                    selectedList.push(value)
+                } else {
+                    // Give error message in input field
+                    switch(listName){
+                    case "skills":
+                        this.skillsValue = "Max entry of " + this.maxEntries + " reached!"
+                        break;
+                    case "languages":
+                        this.languageValue = "Max entry of " + this.maxEntries + " reached!"
+                        break;
+                    case "frameworks":
+                        this.frameworkValue = "Max entry of " + this.maxEntries + " reached!"
+                        break;
+                    }
                 }
             }
             this.updateLocalStorage()
