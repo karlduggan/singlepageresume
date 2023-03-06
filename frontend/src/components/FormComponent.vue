@@ -31,9 +31,9 @@
                         <p>{{ index + 1 }}</p>
                     </div>
                     <div>
-                        <input v-on:input="updateItem(index, $event)" :value="item.title" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <input v-on:input="updateItem2(index, $event)" :value="item.title" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                     </div>
-                    <div class="cursor-pointer" @click="deleteItem(index)">
+                    <div class="cursor-pointer" @click="deleteItem2(index)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="red-700"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </div>
 
@@ -453,12 +453,23 @@ export default {
             this.emit_cv_data()
             this.updateLocalStorage()
         },
+        updateItem2(index, event){
+            const updateValue = event.target.value
+            this.cv_data[this.modalSet].items[index] = updateValue
+            this.emit_cv_data()
+            this.updateLocalStorage()
+        },
         deleteItem(index){
             // Get the currect list from modalSelected
             this.cv_data.lists[this.modalSet].items.splice(index, 1)
             this.emit_cv_data()
             this.updateLocalStorage()
         },
+        deleteItem2(index){
+            this.cv_data[this.modalSet].items.splice(index, 1)
+            this.emit_cv_data()
+        },
+
         // Edit Modal 
         openModal(option){
             // Set up the selected modal from the option chosen
