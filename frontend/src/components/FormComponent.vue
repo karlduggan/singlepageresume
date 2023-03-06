@@ -21,6 +21,29 @@
                 </a>
             </div>
         </ModalComponent>
+        <!--Edit Modal-->
+        <ModalComponent :open="editModalOpen">
+            <div>
+                <h1 class="block text-gray-600 font-bold text-left text-lg">{{ modalName }} Section</h1>
+            </div>
+            <div v-for="(item, index) in modalItems" :key="index" class="flex justify-center gap-4 p-4 items-center border-b-2">
+                    <div>
+                        <p>{{ index + 1 }}</p>
+                    </div>
+                    <div>
+                        <input v-on:input="updateItem(index, $event)" :value="item.title" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div class="cursor-pointer" @click="deleteItem(index)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="red-700"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+
+            </div>
+            <div class="flex justify-center gap-4 mt-5">
+                <a class="cursor-pointer bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" @click="editModalOpen = false">
+                    Close
+                </a>
+            </div>
+        </ModalComponent>
     <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
         <h1 class="text-2xl font-bold text-gray-600">CV Layout Generator</h1>
         <div class="flex justify-between gap-4">
@@ -295,6 +318,8 @@ export default {
     },
     data(){
         return {
+            // Edit Modal for (Experience, Education and Projects)
+            editModalOpen: false,
             // Modal state
             modalOpen: false,
             modalSelection : null,
@@ -357,14 +382,20 @@ export default {
                     }
                 },
                 experience: {
+                    name: "Experience",
+                    set: "experience",
                     display: false,
-                    items: [{'title': 'tetsing title', 'text': "testing text"}]
+                    items: []
                 },
                 education: {
+                    name: "Education",
+                    set: "education",
                     display: false,
                     items: []
                 },
                 project: {
+                    name: "Projects",
+                    set: "project",
                     display: false,
                     items: []
                 }
@@ -428,9 +459,11 @@ export default {
             this.emit_cv_data()
             this.updateLocalStorage()
         },
+        // Edit Modal 
         openModal(option){
             // Set up the selected modal from the option chosen
-            let open = false;
+            let openModal1 = false;
+            let openModal2 = false;
             switch(option) {
                 case "list01":
                     //Skills
@@ -438,7 +471,7 @@ export default {
                         this.modalItems = this.cv_data.lists.list01.items;
                         this.modalName = this.cv_data.lists.list01.name;
                         this.modalSet = this.cv_data.lists.list01.set;
-                        open = true; 
+                        openModal1 = true; 
                     }
                     break;
                 case "list02":
@@ -447,7 +480,7 @@ export default {
                         this.modalItems = this.cv_data.lists.list02.items;
                         this.modalName = this.cv_data.lists.list02.name;
                         this.modalSet = this.cv_data.lists.list02.set;
-                        open = true;
+                        openModal1 = true;
                     }
                     break;
                 case "list03":
@@ -456,12 +489,40 @@ export default {
                         this.modalItems = this.cv_data.lists.list03.items
                         this.modalName = this.cv_data.lists.list03.name;
                         this.modalSet = this.cv_data.lists.list03.set;
-                        open = true;
+                        openModal1 = true;
                     }
                     break;
+                case "experience":
+                //Frameworks
+                if(this.cv_data.experience.items.length > 0){
+                    this.modalItems = this.cv_data.experience.items
+                    this.modalName = this.cv_data.experience.name;
+                    this.modalSet = this.cv_data.experience.set;
+                    openModal2 = true;
+                }
+                break;
+                case "education":
+                //Frameworks
+                if(this.cv_data.education.items.length > 0){
+                    this.modalItems = this.cv_data.education.items
+                    this.modalName = this.cv_data.education.name;
+                    this.modalSet = this.cv_data.education.set;
+                    openModal2 = true;
+                }
+                break;
+                case "project":
+                //Frameworks
+                if(this.cv_data.project.items.length > 0){
+                    this.modalItems = this.cv_data.project.items
+                    this.modalName = this.cv_data.project.name;
+                    this.modalSet = this.cv_data.project.set;
+                    openModal2 = true;
+                }
+                break;
                
             }
-            this.modalOpen = open
+            this.modalOpen = openModal1
+            this.editModalOpen = openModal2
             
         },
         countCharacters(){
