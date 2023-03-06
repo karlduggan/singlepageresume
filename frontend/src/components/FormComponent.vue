@@ -22,6 +22,11 @@
             </div>
         </ModalComponent>
     <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
+        <h1 class="text-2xl font-bold text-gray-600">CV Layout Generator</h1>
+        <div class="flex justify-between gap-4">
+            <a class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold text-xs py-2 px-4 rounded" @click="loadJSON">Load JSON</a>
+            <a class="cursor-pointer bg-yellow-500 w-[100%] hover:bg-yellow-600 text-white font-bold text-xs py-2 px-4 rounded" @click="saveJSON">Save JSON</a>
+        </div>
         <!--Name and Contact-->
         <div class="mb-5">
             <div class="flex mb-4 gap-4 w-full">
@@ -157,12 +162,16 @@
                     Experience
                 </label>
                 <div class="flex">
-                    <input v-model="experience_title" maxlength="100" v-on:keyup.enter="addToList('experience')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
+                    <input v-model="experience_title" maxlength="100" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job Title">
                 </div>
                 <textarea v-model="experience_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Job description"></textarea>
             </div>
             <div class="mt-2 flex justify-between gap-4">
-                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
+                <a class="cursor-pointer bg-blue-500 w-[100%] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm " @click="addToList('experience')" >Add</a>
+                <p class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded text-sm" @click="openModal('experience')">Edit</p>
+                <div class="w-[100%] self-center">
+                    <p class="text-gray-400 text-xs">0 out of 3</p>
+                </div>
             </div>
         </div>
         <!-- Education and Certifications -->
@@ -172,12 +181,16 @@
                     Education & Certifications
                 </label>
                 <div class="flex">
-                    <input v-model="education_title" maxlength="100" v-on:keyup.enter="addToList('education')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education Title">
+                    <input v-model="education_title" maxlength="100" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education Title">
                 </div>
                 <textarea v-model="education_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Education description"></textarea>
             </div>
             <div class="mt-2 flex justify-between gap-4">
-                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
+                <a class="cursor-pointer bg-blue-500 w-[100%] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm " @click="addToList('education')" >Add</a>
+                <p class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded text-sm" @click="openModal('education')">Edit</p>
+                <div class="w-[100%] self-center">
+                    <p class="text-gray-400 text-xs">0 out of 3</p>
+                </div>
             </div>
         </div>
         <!-- Projects -->
@@ -187,21 +200,20 @@
                     Projects
                 </label>
                 <div class="flex">
-                    <input v-model="project_title" maxlength="100" v-on:keyup.enter="addToList('project')" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project Title">
+                    <input v-model="project_title" maxlength="100" class="shadow appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project Title">
                 </div>
                 <textarea v-model="project_text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" placeholder="Project description"></textarea>
             
             </div>
             <div class="mt-2 flex justify-between gap-4">
-                <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-[100%] text-sm " >Add</a>
+                <a class="cursor-pointer bg-blue-500 w-[100%] hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm " @click="addToList('project')" >Add</a>
+                <p class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded text-sm" @click="openModal('project')">Edit</p>
+                <div class="w-[100%] self-center">
+                    <p class="text-gray-400 text-xs">0 out of 3</p>
+                </div>
             </div>
             
         </div>
-            <div class="flex justify-between gap-4">
-                <a class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded" @click="loadJSON">Load JSON</a>
-                <a class="cursor-pointer bg-yellow-500 w-[100%] hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded" @click="saveJSON">Save JSON</a>
-            </div>
-
             <a class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="emit_download_pdf">Download PDF</a>
             <p class="text-gray-600 text-xs">Created by Karl Duggan 2023</p>
     </form>
@@ -600,6 +612,7 @@ export default {
                 }
             }
             this.updateLocalStorage()
+            this.emit_cv_data()
         },
 
         emit_cv_data : function(){
