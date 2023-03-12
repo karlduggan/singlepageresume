@@ -46,7 +46,7 @@
             </div>
         </ModalComponent>
     <form  class="bg-white shadow-md rounded px-8 pt-6 pb-8 flex flex-col space-y-4">
-        <h1 class="text-2xl font-bold text-gray-600">CV Layout Generator</h1>
+        <h1 class="text-2xl font-bold text-gray-600">Single Page Resume</h1>
         <div class="flex justify-between gap-4">
             <a class="cursor-pointer bg-emerald-500 w-[100%] hover:bg-emerald-600 text-white font-bold text-xs py-2 px-4 rounded" @click="loadJSON">Load JSON</a>
             <a class="cursor-pointer bg-yellow-500 w-[100%] hover:bg-yellow-600 text-white font-bold text-xs py-2 px-4 rounded" @click="saveJSON">Save JSON</a>
