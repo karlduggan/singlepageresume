@@ -27,12 +27,13 @@
                 <h1 class="block text-gray-600 font-bold text-left text-lg">{{ modalName }} Section</h1>
             </div>
             <div v-for="(item, index) in modalItems" :key="index" class="flex justify-center gap-4 p-4 items-center border-b-2">
-                    <div>
+                   
                         <p>{{ index + 1 }}</p>
-                    </div>
-                    <div>
-                        <input v-on:input="updateItem2(index, $event)" :value="item.title" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    </div>
+                        <input v-on:input="updateItem2(index, $event, 'title')" :value="item.title" class=" appearance-none border-none w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    
+                    
+                        <textarea v-on:input="updateItem2(index, $event, 'text')" :value="item.text" class="mt-4 shadow h-28 appearance-none border border-gray-300 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-sm" id="name" type="tel" ></textarea>
+                   
                     <div class="cursor-pointer" @click="deleteItem2(index)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="red-700"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                     </div>
@@ -453,9 +454,9 @@ export default {
             this.emit_cv_data()
             this.updateLocalStorage()
         },
-        updateItem2(index, event){
+        updateItem2(index, event, type){
             const updateValue = event.target.value
-            this.cv_data[this.modalSet].items[index] = updateValue
+            this.cv_data[this.modalSet].items[index][type] = updateValue
             this.emit_cv_data()
             this.updateLocalStorage()
         },
