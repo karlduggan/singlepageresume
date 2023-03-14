@@ -1,4 +1,6 @@
-# CV_Generator
+# Single Page Resume
+
+https://singlepageresume.netlify.app/
 
 # Form Layout
 
